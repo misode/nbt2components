@@ -11,14 +11,17 @@
     <a href="https://minecraft.wiki/w/Item_format/1.20.5#Data_components" target="_blank">[wiki]</a>
   </header>
   <main>
-    <textarea id="input" cols="30" rows="4"></textarea>
+    <div class="text-container">
+      <textarea id="input" cols="30" rows="4"></textarea>
+      <span class="input-clear overlay">[clear]</span>
+    </div>
     <div class="tabs">
       <span class="tab selected">JSON</span>
       <span class="tab">Command</span>
     </div>
-    <div class="output-container">
+    <div class="text-container">
       <textarea id="output" cols="30" rows="20" readonly></textarea>
-      <span class="output-copy">[copy]</span>
+      <span class="output-copy overlay">[copy]</span>
     </div>
   </main>
   <script type="module" src="/src/main.ts"></script>

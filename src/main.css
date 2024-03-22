@@ -54,15 +54,15 @@ textarea.error {
   color: #ff7979;
 }
 
-.output-container {
+.text-container {
   position: relative;
 }
 
-.output-container textarea {
+.text-container textarea {
   width: 100%;
 }
 
-.output-copy {
+.overlay {
   position: absolute;
   right: 0;
   top: 0;
@@ -71,11 +71,11 @@ textarea.error {
   cursor: pointer;
 }
 
-.output-copy:hover {
+.overlay:hover {
   color: #42b0ff;
 }
 
-.output-copy.pressed {
+.overlay.pressed {
   transform: scale(0.9);
   color: #0c64a3;
 }

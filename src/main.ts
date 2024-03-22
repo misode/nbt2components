@@ -15,6 +15,7 @@ const example = EXAMPLES[Math.floor(EXAMPLES.length * Math.random())]
 const inputField = document.getElementById('input') as HTMLTextAreaElement
 const outputField = document.getElementById('output') as HTMLTextAreaElement
 const modeTabs = document.querySelectorAll('.tab') as NodeListOf<HTMLElement>
+const clearButton = document.querySelector('.input-clear') as HTMLElement
 const copyButton = document.querySelector('.output-copy') as HTMLElement
 
 function nbtToJson(tag: NbtTag): any {
@@ -109,6 +110,16 @@ modeTabs.forEach(tab => {
     localStorage.setItem(MODE_STORE_KEY, tab.textContent!)
     update()
   })
+})
+
+clearButton.addEventListener('click', () => {
+  if (inputField.value.length > 0) {
+    inputField.value = ''
+    localStorage.setItem(INPUT_STORE_KEY, inputField.value)
+    update()
+    clearButton.classList.add('pressed')
+    setTimeout(() => clearButton.classList.remove('pressed'), 200)
+  }
 })
 
 copyButton.addEventListener('click', () => {
