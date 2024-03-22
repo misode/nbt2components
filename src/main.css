@@ -7,6 +7,23 @@
 body {
   background-color: #181818;
   color: #eee;
+	font-family: Consolas, monospace;
+}
+
+header {
+  display: flex;
+  padding: 1rem 1rem 0;
+  align-items: center;
+}
+
+header a {
+  color: #76c6ff;
+  text-decoration: none;
+  margin-left: 0.5rem;
+}
+
+header a:hover {
+  color: #42b0ff;
 }
 
 main {
@@ -15,11 +32,14 @@ main {
   padding: 1rem;
 }
 
+main > * {
+  margin-bottom: 1rem;
+}
+
 textarea {
   background-color: #111;
   color: #eee;
   border-radius: 0.5rem;
-  margin-bottom: 1rem;
   padding: 0.5rem;
   resize: vertical;
 }
@@ -27,4 +47,25 @@ textarea {
 textarea.error {
   background-color: #1c0000;
   color: #ff7979;
+}
+
+.tabs {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.tab {
+  color: #aaa;
+  padding: 0 0.25rem;
+  margin: 0 0.25rem;
+  cursor: pointer;
+}
+
+.tab:hover {
+  color: #fff;
+}
+
+.tab.selected {
+  color: #fff;
+  border-bottom: 2px solid #fff;
 }

@@ -30,7 +30,7 @@ export function collectComponents(tag: NbtCompound): NbtCompound {
     if (!data.isList()) return map
     data.forEach(e => {
       if (!e.isCompound()) return
-      map.set(e.getString("id"), e.get("lvl") ?? new NbtInt(1))
+      map.set(e.getString("id"), new NbtInt(e.get("lvl")?.getAsNumber() ?? 1))
     })
     return map
   }

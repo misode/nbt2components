@@ -3,6 +3,7 @@ import { collectComponents } from './components'
 import './main.css'
 
 const INPUT_STORE_KEY = 'misode_nbt2components_input'
+const MODE_STORE_KEY = 'misode_nbt2components_mode'
 
 const inputField = document.getElementById('input') as HTMLTextAreaElement
 const outputField = document.getElementById('output') as HTMLTextAreaElement
@@ -49,10 +50,21 @@ function update() {
       throw new Error('Expected compound at position 0: <--[HERE]')
     }
     const components = collectComponents(tag)
-    outputField.value = JSON.stringify(nbtToJson(components), null, 2)
+    const mode = document.querySelector('.tab.selected')?.textContent ?? 'JSON'
+    if (mode === 'Command') {
+      const pairs: string[] = []
+      components.forEach((key, value) => pairs.push(key.replace(/^minecraft:/, '') + '=' + value.toString()))
+      outputField.value = `[${pairs.join(',')}]`
+    } else {
+      outputField.value = JSON.stringify(nbtToJson(components), null, 2)
+    }
   } catch (e) {
-    outputField.value = (e instanceof Error) ? e.message : `${e}`
-    outputField.classList.add('error')
+    if (inputField.value.length === 0) {
+      outputField.value = ''
+    } else {
+      outputField.value = (e instanceof Error) ? e.message : `${e}`
+      outputField.classList.add('error')
+    }
   }
 }
 
@@ -61,8 +73,21 @@ if (storedInput !== null) {
   inputField.value = storedInput
   update()
 }
+const storedMode = localStorage.getItem(MODE_STORE_KEY)
+if (storedMode !== null) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.toggle('selected', t.textContent === storedMode))
+  update()
+}
 
 inputField.addEventListener('input', () => {
   localStorage.setItem(INPUT_STORE_KEY, inputField.value)
   update()
+})
+
+document.querySelectorAll('.tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    document.querySelectorAll('.tab').forEach(t => t.classList.toggle('selected', tab === t))
+    localStorage.setItem(MODE_STORE_KEY, tab.textContent!)
+    update()
+  })
 })

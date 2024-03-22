@@ -3,11 +3,19 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>NBT 2 Components</title>
+  <title>NBT to Components</title>
 </head>
 <body>
+  <header>
+    <h2>Item NBT → Components</h2>
+    <a href="https://minecraft.wiki/w/Item_format/1.20.5#Data_components" target="_blank">[wiki]</a>
+  </header>
   <main>
-    <textarea id="input" cols="30" rows="3"></textarea>
+    <textarea id="input" cols="30" rows="4"></textarea>
+    <div class="tabs">
+      <span class="tab selected">JSON</span>
+      <span class="tab">Command</span>
+    </div>
     <textarea id="output" cols="30" rows="20"></textarea>
   </main>
   <script type="module" src="/src/main.ts"></script>
