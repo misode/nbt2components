@@ -1,0 +1,9 @@
+{
+  "compilerOptions": {
+    "module": "es2022",
+    "moduleResolution": "bundler",
+    "lib": ["dom", "es2022"],
+    "strict": true,
+    "outDir": "dist"
+  }
+}

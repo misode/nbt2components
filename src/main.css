@@ -1,0 +1,30 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: #181818;
+  color: #eee;
+}
+
+main {
+  display: flex;
+  flex-direction: column;
+  padding: 1rem;
+}
+
+textarea {
+  background-color: #111;
+  color: #eee;
+  border-radius: 0.5rem;
+  margin-bottom: 1rem;
+  padding: 0.5rem;
+  resize: vertical;
+}
+
+textarea.error {
+  background-color: #1c0000;
+  color: #ff7979;
+}
