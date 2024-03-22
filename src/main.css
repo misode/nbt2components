@@ -41,6 +41,7 @@ main > * {
 }
 
 textarea {
+  display: block;
   background-color: #111;
   color: #eee;
   border-radius: 0.5rem;

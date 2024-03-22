@@ -307,10 +307,58 @@ export function collectComponents(tag: NbtCompound): NbtCompound {
   }
 
   const dyeColors = ['white', 'orange', 'magenta', 'light_blue', 'yellow', 'lime', 'pink', 'gray', 'light_gray', 'cyan', 'purple', 'blue', 'brown', 'green', 'red', 'black']
+  const bannerPatterns: Record<string, string> = {
+    'b': 'base',
+    'bs': 'stripe_bottom',
+    'ts': 'stripe_top',
+    'ls': 'stripe_left',
+    'rs': 'stripe_right',
+    'cs': 'stripe_center',
+    'ms': 'stripe_middle',
+    'drs': 'stripe_downright',
+    'dls': 'stripe_downleft',
+    'ss': 'small_stripes',
+    'cr': 'cross',
+    'sc': 'straight_cross',
+    'ld': 'diagonal_left',
+    'rud': 'diagonal_right',
+    'lud': 'diagonal_up_left',
+    'rd': 'diagonal_up_right',
+    'vh': 'half_vertical',
+    'vhr': 'half_vertical_right',
+    'hh': 'half_horizontal',
+    'hhb': 'half_horizontal_bottom',
+    'bl': 'square_bottom_left',
+    'br': 'square_bottom_right',
+    'tl': 'square_top_left',
+    'tr': 'square_top_right',
+    'bt': 'triangle_bottom',
+    'tt': 'triangle_top',
+    'bts': 'triangles_bottom',
+    'tts': 'triangles_top',
+    'mc': 'circle',
+    'mr': 'rhombus',
+    'bo': 'border',
+    'cbo': 'curly_border',
+    'bri': 'bricks',
+    'gra': 'gradient',
+    'gru': 'gradient_up',
+    'cre': 'creeper',
+    'sku': 'skull',
+    'flo': 'flower',
+    'moj': 'mojang',
+    'glb': 'globe',
+    'pig': 'piglin',
+  }
 
   function patternUpdater(data: NbtTag) {
     if (!data.isCompound()) return data
-    return data
+    const color = data.get('Color')
+    const pattern = data.get('Pattern')
+    const result = new NbtCompound()
+    if (color) result.set('color', new NbtString(dyeColors[color.getAsNumber()]))
+    if (pattern) result.set('pattern', new NbtString(bannerPatterns[pattern.getAsString()]))
+    return result
   }
 
   const blockEntityTag = tag.get('BlockEntityTag')

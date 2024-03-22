@@ -8,7 +8,9 @@ const MODE_STORE_KEY = 'misode_nbt2components_mode'
 const EXAMPLES = [
   '{Enchantments:[{id:"minecraft:efficiency",lvl:4}]}',
   '"{CustomModelData:372001,display:{Name:\\"Bob\\"}}"',
-  'CanPlaceOn:["stone","minecraft:grass_block"]',
+  'CanPlaceOn:[\\"stone\\",\\"minecraft:grass_block\\"]',
+  '{BlockEntityTag:{Patterns:[{Color:2,Pattern:"cs"}]}}',
+  '\'{display:{color:2459768},HideFlags:64}\'',
 ]
 const example = EXAMPLES[Math.floor(EXAMPLES.length * Math.random())]
 
@@ -42,11 +44,19 @@ function getOutput(input: string) {
     if (e instanceof Error && e.message.includes('Expected value at')) {
       try {
         tag = safeRead(safeRead(`"${input}"`).getAsString())
-      } catch (_) {
+      } catch (e2) {
         throw e
       }
     } else if (!input.startsWith('{')) {
-      tag = safeRead(`{${input}}`)
+      try {
+        tag = safeRead(`{${input}}`)
+      } catch (e2) {
+        if (e2 instanceof Error && e2.message.includes('Expected value at')) {
+          tag = safeRead(safeRead(`"{${input}}"`).getAsString())
+        } else {
+          throw e
+        }
+      }
     } else {
       throw e
     }
@@ -70,7 +80,11 @@ function getOutput(input: string) {
 
 function update() {
   inputField.placeholder = example
-  outputField.placeholder = getOutput(example)
+  try {
+    outputField.placeholder = getOutput(example)
+  } catch (e) {
+    console.error('Error while getting example output', e)
+  }
 
   outputField.classList.remove('error')
   if (inputField.value.length === 0) {
