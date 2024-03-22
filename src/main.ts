@@ -5,6 +5,13 @@ import './main.css'
 const INPUT_STORE_KEY = 'misode_nbt2components_input'
 const MODE_STORE_KEY = 'misode_nbt2components_mode'
 
+const EXAMPLES = [
+  '{Enchantments:[{id:"minecraft:efficiency",lvl:4}]}',
+  '"{CustomModelData:372001,display:{Name:\\"Bob\\"}}"',
+  'CanPlaceOn:["stone","minecraft:grass_block"]',
+]
+const example = EXAMPLES[Math.floor(EXAMPLES.length * Math.random())]
+
 const inputField = document.getElementById('input') as HTMLTextAreaElement
 const outputField = document.getElementById('output') as HTMLTextAreaElement
 
@@ -16,68 +23,78 @@ function nbtToJson(tag: NbtTag): any {
   throw new Error(`Cannot write ${tag} to JSON`)
 }
 
-function update() {
-  outputField.classList.remove('error')
-  try {
-    const safeRead = (input: string) => {
-      const reader = new StringReader(input)
-      tag = NbtTag.fromString(reader)
-      if (reader.canRead()) {
-        throw reader.createError('Found trailing data')
-      }
-      return tag
+function getOutput(input: string) {
+  const safeRead = (source: string) => {
+    const reader = new StringReader(source)
+    tag = NbtTag.fromString(reader)
+    if (reader.canRead()) {
+      throw reader.createError('Found trailing data')
     }
-    let tag: NbtTag
-    try {
-      tag = safeRead(inputField.value)
-    } catch (e) {
-      if (e instanceof Error && e.message.includes('Expected value at')) {
-        try {
-          tag = safeRead(safeRead(`"${inputField.value}"`).getAsString())
-        } catch (_) {
-          throw e
-        }
-      } else if (!inputField.value.startsWith('{')) {
-        tag = safeRead(`{${inputField.value}}`)
-      } else {
+    return tag
+  }
+  let tag: NbtTag
+  try {
+    tag = safeRead(input)
+  } catch (e) {
+    if (e instanceof Error && e.message.includes('Expected value at')) {
+      try {
+        tag = safeRead(safeRead(`"${input}"`).getAsString())
+      } catch (_) {
         throw e
       }
-    }
-    if (tag.isString()) {
-      tag = safeRead(tag.getAsString())
-    }
-    if (!tag.isCompound()) {
-      throw new Error('Expected compound at position 0: <--[HERE]')
-    }
-    const components = collectComponents(tag)
-    const mode = document.querySelector('.tab.selected')?.textContent ?? 'JSON'
-    if (mode === 'Command') {
-      const pairs: string[] = []
-      components.forEach((key, value) => pairs.push(key.replace(/^minecraft:/, '') + '=' + value.toString()))
-      outputField.value = `[${pairs.join(',')}]`
+    } else if (!input.startsWith('{')) {
+      tag = safeRead(`{${input}}`)
     } else {
-      outputField.value = JSON.stringify(nbtToJson(components), null, 2)
+      throw e
     }
+  }
+  if (tag.isString()) {
+    tag = safeRead(tag.getAsString())
+  }
+  if (!tag.isCompound()) {
+    throw new Error('Expected compound at position 0: <--[HERE]')
+  }
+  const components = collectComponents(tag)
+  const mode = document.querySelector('.tab.selected')?.textContent ?? 'JSON'
+  if (mode === 'Command') {
+    const pairs: string[] = []
+    components.forEach((key, value) => pairs.push(key.replace(/^minecraft:/, '') + '=' + value.toString()))
+    return `[${pairs.join(',')}]`
+  } else {
+    return JSON.stringify(nbtToJson(components), null, 2)
+  }
+}
+
+function update() {
+  inputField.placeholder = example
+  outputField.placeholder = getOutput(example)
+
+  outputField.classList.remove('error')
+  if (inputField.value.length === 0) {
+    outputField.value = ''
+    return
+  }
+  try {
+    outputField.value = getOutput(inputField.value)
   } catch (e) {
-    if (inputField.value.length === 0) {
-      outputField.value = ''
-    } else {
-      outputField.value = (e instanceof Error) ? e.message : `${e}`
-      outputField.classList.add('error')
-    }
+    outputField.value = (e instanceof Error) ? e.message : `${e}`
+    outputField.classList.add('error')
   }
 }
 
 const storedInput = localStorage.getItem(INPUT_STORE_KEY)
 if (storedInput !== null) {
   inputField.value = storedInput
-  update()
 }
+
 const storedMode = localStorage.getItem(MODE_STORE_KEY)
 if (storedMode !== null) {
-  document.querySelectorAll('.tab').forEach(t => t.classList.toggle('selected', t.textContent === storedMode))
-  update()
+  document.querySelectorAll('.tab').forEach(tab => {
+    tab.classList.toggle('selected', tab.textContent === storedMode)
+  })
 }
+
+update()
 
 inputField.addEventListener('input', () => {
   localStorage.setItem(INPUT_STORE_KEY, inputField.value)

@@ -43,6 +43,9 @@ export function collectComponents(tag: NbtCompound): NbtCompound {
     move('Lore', 'lore', undefined, displayTag)
     move('color', 'dyed_color', undefined, displayTag)
     move('MapColor', 'map_color', undefined, displayTag)
+    if (displayTag.size === 0) {
+      tag.delete('display')
+    }
   }
 
   function adventureModePredicateUpdater(data: NbtTag) {
@@ -55,7 +58,30 @@ export function collectComponents(tag: NbtCompound): NbtCompound {
   move('CanDestroy', 'can_break', adventureModePredicateUpdater)
   move('CanPlaceOn', 'can_place_one', adventureModePredicateUpdater)
 
-  move('AttributeModifiers', 'attribute_modifiers')
+  const attributeOperations = ['add_value', 'add_multiplied_base', 'add_multiplied_total']
+
+  function modifierUpdater(data: NbtTag) {
+    if (!data.isCompound()) return data
+    const attributeName = data.get('AttributeName')
+    const slot = data.get('Slot')
+    const uuid = data.get('UUID')
+    const name = data.get('Name')
+    const amount = data.get('Amount')
+    const operation = data.get('Operation')
+    const modifier = new NbtCompound()
+    if (attributeName) modifier.set('type', attributeName)
+    if (slot) modifier.set('slot', slot)
+    if (uuid) modifier.set('uuid', uuid)
+    if (name) modifier.set('name', name)
+    if (amount) modifier.set('amount', amount)
+    if (operation) modifier.set('operation', new NbtString(attributeOperations[operation.getAsNumber()]))
+    return modifier
+  }
+
+  move('AttributeModifiers', 'attribute_modifiers', data => {
+    if (!data.isList()) return data
+    return new NbtList(data.map(modifierUpdater))
+  })
 
   function itemStackUpdater(data: NbtTag) {
     if (!data.isCompound()) return data
