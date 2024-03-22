@@ -14,6 +14,8 @@ const example = EXAMPLES[Math.floor(EXAMPLES.length * Math.random())]
 
 const inputField = document.getElementById('input') as HTMLTextAreaElement
 const outputField = document.getElementById('output') as HTMLTextAreaElement
+const modeTabs = document.querySelectorAll('.tab') as NodeListOf<HTMLElement>
+const copyButton = document.querySelector('.output-copy') as HTMLElement
 
 function nbtToJson(tag: NbtTag): any {
   if (tag.isNumber()) return tag.getAsNumber()
@@ -89,7 +91,7 @@ if (storedInput !== null) {
 
 const storedMode = localStorage.getItem(MODE_STORE_KEY)
 if (storedMode !== null) {
-  document.querySelectorAll('.tab').forEach(tab => {
+  modeTabs.forEach(tab => {
     tab.classList.toggle('selected', tab.textContent === storedMode)
   })
 }
@@ -101,10 +103,18 @@ inputField.addEventListener('input', () => {
   update()
 })
 
-document.querySelectorAll('.tab').forEach(tab => {
+modeTabs.forEach(tab => {
   tab.addEventListener('click', () => {
-    document.querySelectorAll('.tab').forEach(t => t.classList.toggle('selected', tab === t))
+    modeTabs.forEach(t => t.classList.toggle('selected', tab === t))
     localStorage.setItem(MODE_STORE_KEY, tab.textContent!)
     update()
   })
+})
+
+copyButton.addEventListener('click', () => {
+  if (outputField.value.length > 0) {
+    navigator.clipboard.writeText(outputField.value)
+    copyButton.classList.add('pressed')
+    setTimeout(() => copyButton.classList.remove('pressed'), 200)
+  }
 })

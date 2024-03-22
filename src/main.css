@@ -14,6 +14,8 @@ header {
   display: flex;
   padding: 1rem 1rem 0;
   align-items: center;
+  max-width: 960px;
+  margin: 0 auto;
 }
 
 header a {
@@ -30,6 +32,8 @@ main {
   display: flex;
   flex-direction: column;
   padding: 1rem;
+  max-width: 960px;
+  margin: 0 auto;
 }
 
 main > * {
@@ -42,11 +46,38 @@ textarea {
   border-radius: 0.5rem;
   padding: 0.5rem;
   resize: vertical;
+  min-height: 4rem;
 }
 
 textarea.error {
   background-color: #1c0000;
   color: #ff7979;
+}
+
+.output-container {
+  position: relative;
+}
+
+.output-container textarea {
+  width: 100%;
+}
+
+.output-copy {
+  position: absolute;
+  right: 0;
+  top: 0;
+  padding: 0.5rem;
+  color: #76c6ff;
+  cursor: pointer;
+}
+
+.output-copy:hover {
+  color: #42b0ff;
+}
+
+.output-copy.pressed {
+  transform: scale(0.9);
+  color: #0c64a3;
 }
 
 .tabs {
