@@ -188,7 +188,7 @@ export function collectComponents(tag: NbtCompound): NbtCompound {
       if (generation) contents.set('generation', generation)
       if (resolved) contents.set('resolved', new NbtByte(resolved.getAsNumber()))
     }
-    components.set(writable ? 'minecraft:writable_book_content' : 'minecraft:written_book_contents', contents)
+    components.set(writable ? 'minecraft:writable_book_content' : 'minecraft:written_book_content', contents)
     tag.delete('pages')
     tag.delete('filtered_pages')
     tag.delete('title')
