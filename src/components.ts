@@ -103,6 +103,17 @@ export function collectComponents(tag: NbtCompound): NbtCompound {
     return item
   }
 
+  const charged = tag.get('Charged')
+  if (charged?.getAsNumber() === 1) {
+    components.set('minecraft:charged_projectiles', new NbtList())
+    tag.delete('Charged')
+  }
+
+  move('ChargedProjectiles', 'charged_projectiles', data => {
+    if (!data.isList()) return data
+    return new NbtList(data.map(itemStackUpdater))
+  })
+
   move('Items', 'bundle_contents', data => {
     if (!data.isList()) return data
     return new NbtList(data.map(itemStackUpdater))
