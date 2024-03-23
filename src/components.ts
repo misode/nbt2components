@@ -56,7 +56,7 @@ export function collectComponents(tag: NbtCompound): NbtCompound {
   }
 
   move('CanDestroy', 'can_break', adventureModePredicateUpdater)
-  move('CanPlaceOn', 'can_place_one', adventureModePredicateUpdater)
+  move('CanPlaceOn', 'can_place_on', adventureModePredicateUpdater)
 
   const attributeOperations = ['add_value', 'add_multiplied_base', 'add_multiplied_total']
 
