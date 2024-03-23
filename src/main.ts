@@ -11,6 +11,7 @@ const EXAMPLES = [
   'CanPlaceOn:[\\"stone\\",\\"minecraft:grass_block\\"]',
   '{BlockEntityTag:{Patterns:[{Color:2,Pattern:"cs"}]}}',
   '\'{display:{color:2459768},HideFlags:64}\'',
+  'LodestoneDimension:the_nether, LodestonePos:[1,2,3], LodestoneTracked:0',
 ]
 const example = EXAMPLES[Math.floor(EXAMPLES.length * Math.random())]
 
@@ -20,11 +21,19 @@ const modeTabs = document.querySelectorAll('.tab') as NodeListOf<HTMLElement>
 const clearButton = document.querySelector('.input-clear') as HTMLElement
 const copyButton = document.querySelector('.output-copy') as HTMLElement
 
-function nbtToJson(tag: NbtTag): any {
-  if (tag.isNumber()) return tag.getAsNumber()
+const booleanBytes = new Set(['show_in_tooltip', 'resolved', 'tracked', 'has_trail', 'has_twinkle'])
+
+function nbtToJson(tag: NbtTag, keyHint?: string): any {
+  if (tag.isNumber()) {
+    const value = tag.getAsNumber()
+    if (keyHint && tag.isByte() && booleanBytes.has(keyHint) && (value == 0 || value == 1)) {
+      return value === 1
+    }
+    return value
+  }
   if (tag.isString()) return tag.getAsString()
-  if (tag.isListOrArray()) return tag.map(nbtToJson)
-  if (tag.isCompound()) return tag.map((key, value) => [key, nbtToJson(value)])
+  if (tag.isListOrArray()) return tag.map(e => nbtToJson(e))
+  if (tag.isCompound()) return tag.map((key, value) => [key, nbtToJson(value, key)])
   throw new Error(`Cannot write ${tag} to JSON`)
 }
 

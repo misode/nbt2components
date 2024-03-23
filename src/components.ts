@@ -186,7 +186,7 @@ export function collectComponents(tag: NbtCompound): NbtCompound {
       }
       if (author) contents.set('author', author)
       if (generation) contents.set('generation', generation)
-      if (resolved) contents.set('resolved', resolved)
+      if (resolved) contents.set('resolved', new NbtByte(resolved.getAsNumber()))
     }
     components.set(writable ? 'minecraft:writable_book_content' : 'minecraft:written_book_contents', contents)
     tag.delete('pages')
@@ -251,7 +251,7 @@ export function collectComponents(tag: NbtCompound): NbtCompound {
       tracker.set('target', target)
     }
     if (lodestoneTracked) {
-      tracker.set('tracked', lodestoneTracked)
+      tracker.set('tracked', new NbtByte(lodestoneTracked.getAsNumber()))
     }
     components.set('lodestone_tracker', tracker)
     tag.delete('LodestonePos')
