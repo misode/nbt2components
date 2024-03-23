@@ -26,12 +26,17 @@ export function collectComponents(tag: NbtCompound): NbtCompound {
   })
 
   function enchantmentUpdater(data: NbtTag) {
+    if (!data.isList()) return data
     const map = new NbtCompound()
-    if (!data.isList()) return map
     data.forEach(e => {
       if (!e.isCompound()) return
-      map.set(e.getString("id"), new NbtInt(e.get("lvl")?.getAsNumber() ?? 1))
+      if (!e.has('id')) {
+        components.set('minecraft:enchantment_glint_override', new NbtCompound())
+        return
+      }
+      map.set(e.getString('id'), new NbtInt(e.get('lvl')?.getAsNumber() ?? 1))
     })
+    if (map.size === 0) return undefined
     return map
   }
   move('Enchantments', 'enchantments', enchantmentUpdater)
