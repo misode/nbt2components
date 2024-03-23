@@ -386,6 +386,8 @@ export function collectComponents(tag: NbtCompound): NbtCompound {
       if (lootTable) loot.set('loot_table', lootTable)
       if (lootTableSeed) loot.set('seed', lootTableSeed)
       components.set('minecraft:container_loot', loot)
+      blockEntityTag.delete('LootTable')
+      blockEntityTag.delete('LootTableSeed')
     }
     if (blockEntityTag.size > 0) {
       components.set('minecraft:block_entity_data', blockEntityTag)
