@@ -40,7 +40,9 @@ function nbtToJson(tag: NbtTag, keyHint?: string): any {
 function getOutput(input: string) {
   const safeRead = (source: string) => {
     const reader = new StringReader(source)
+    reader.skipWhitespace()
     tag = NbtTag.fromString(reader)
+    reader.skipWhitespace()
     if (reader.canRead()) {
       throw reader.createError('Found trailing data')
     }
@@ -75,6 +77,18 @@ function getOutput(input: string) {
   }
   if (!tag.isCompound()) {
     throw new Error('Expected compound at position 0: <--[HERE]')
+  }
+  if (tag.getString('tag').startsWith('{')) {
+    tag = safeRead(tag.getString('tag'))
+    if (!tag.isCompound()) {
+      throw new Error('Expected compound at position 0: <--[HERE]')
+    }
+  }
+  if (tag.getString('nbt').startsWith('{')) {
+    tag = safeRead(tag.getString('nbt'))
+    if (!tag.isCompound()) {
+      throw new Error('Expected compound at position 0: <--[HERE]')
+    }
   }
   const components = collectComponents(tag)
   const mode = document.querySelector('.tab.selected')?.textContent ?? 'JSON'
