@@ -31,7 +31,7 @@ export function collectComponents(tag: NbtCompound): NbtCompound {
     data.forEach(e => {
       if (!e.isCompound()) return
       if (!e.has('id')) {
-        components.set('minecraft:enchantment_glint_override', new NbtCompound())
+        components.set('minecraft:enchantment_glint_override', new NbtByte(1))
         return
       }
       map.set(e.getString('id'), new NbtInt(e.get('lvl')?.getAsNumber() ?? 1))
