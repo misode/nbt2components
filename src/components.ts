@@ -269,7 +269,7 @@ export function collectComponents(tag: NbtCompound): NbtCompound {
     if (lodestoneTracked) {
       tracker.set('tracked', new NbtByte(lodestoneTracked.getAsNumber()))
     }
-    components.set('lodestone_tracker', tracker)
+    components.set('minecraft:lodestone_tracker', tracker)
     tag.delete('LodestonePos')
     tag.delete('LodestoneDimension')
     tag.delete('LodestoneTracked')
@@ -303,7 +303,7 @@ export function collectComponents(tag: NbtCompound): NbtCompound {
       fireworks.set('explosions', explosions.isList() ? new NbtList(explosions.map(explosionUpdater)) : explosions)
     }
     if (flight) fireworks.set('flight_duration', flight)
-    components.set('fireworks', fireworks)
+    components.set('minecraft:fireworks', fireworks)
     tag.delete('Explosions')
     tag.delete('Flight')
   }

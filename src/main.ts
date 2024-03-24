@@ -96,6 +96,8 @@ function getOutput(input: string) {
     const pairs: string[] = []
     components.forEach((key, value) => pairs.push(key.replace(/^minecraft:/, '') + '=' + value.toString()))
     return `[${pairs.join(',')}]`
+  } else if (mode === 'SNBT') {
+    return components.toString()
   } else {
     return JSON.stringify(nbtToJson(components), null, 2)
   }
