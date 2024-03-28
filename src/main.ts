@@ -1,4 +1,4 @@
-import { NbtTag, StringReader } from 'deepslate'
+import { NbtList, NbtTag, StringReader } from 'deepslate'
 import { collectComponents } from './components'
 import './main.css'
 
@@ -94,7 +94,12 @@ function getOutput(input: string) {
   const mode = document.querySelector('.tab.selected')?.textContent ?? 'JSON'
   if (mode === 'Command') {
     const pairs: string[] = []
-    components.forEach((key, value) => pairs.push(key.replace(/^minecraft:/, '') + '=' + value.toString()))
+    components.forEach((key, value) => {
+      const stringValue = key === 'minecraft:custom_name' ? `'${value.getAsString()}'`
+        : key === 'minecraft:lore' ? `[${(value as NbtList).map(e => `'${e.getAsString()}'`).join(',')}]`
+          : value.toString()
+      pairs.push(key.replace(/^minecraft:/, '') + '=' + stringValue)
+    })
     return `[${pairs.join(',')}]`
   } else if (mode === 'SNBT') {
     return components.toString()
