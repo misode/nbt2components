@@ -293,7 +293,7 @@ export function collectComponents(tag: NbtCompound): NbtCompound {
     return explosion
   }
 
-  move('Explosion', 'firework_exlosion', explosionUpdater)
+  move('Explosion', 'firework_explosion', explosionUpdater)
 
   const explosions = tag.get('Explosions')
   const flight = tag.get('Flight')
