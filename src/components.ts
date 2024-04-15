@@ -241,7 +241,7 @@ export function collectComponents(tag: NbtCompound): NbtCompound {
     if ((flags & 0b0010000) > 0) setFlag('can_place_on', 'predicates', true)
     if ((flags & 0b0100000) > 0) {
       setFlag('stored_enchantments', 'levels')
-      components.set('minecraft:hide_additional_tooltip', new NbtByte(1))
+      components.set('minecraft:hide_additional_tooltip', new NbtCompound())
     }
     if ((flags & 0b1000000) > 0) setFlag('dyed_color', 'rgb')
     tag.delete('HideFlags')

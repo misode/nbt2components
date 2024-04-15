@@ -21,7 +21,7 @@ const modeTabs = document.querySelectorAll('.tab') as NodeListOf<HTMLElement>
 const clearButton = document.querySelector('.input-clear') as HTMLElement
 const copyButton = document.querySelector('.output-copy') as HTMLElement
 
-const booleanBytes = new Set(['minecraft:hide_additional_tooltip', 'minecraft:enchantment_glint_override', 'show_in_tooltip', 'resolved', 'tracked', 'has_trail', 'has_twinkle', 'show_particles', 'show_icon', 'ambient'])
+const booleanBytes = new Set(['minecraft:enchantment_glint_override', 'show_in_tooltip', 'resolved', 'tracked', 'has_trail', 'has_twinkle', 'show_particles', 'show_icon', 'ambient'])
 
 function nbtToJson(tag: NbtTag, keyHint?: string): any {
   if (tag.isNumber()) {
