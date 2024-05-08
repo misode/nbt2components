@@ -95,7 +95,7 @@ export function collectComponents(tag: NbtCompound): NbtCompound {
     const tag = data.get('tag')
     const item = new NbtCompound()
     if (id) item.set('id', id)
-    if (count) item.set('count', count)
+    if (count) item.set('count', new NbtInt(count.getAsNumber()))
     if (tag?.isCompound()) {
       const components = collectComponents(tag)
       if (components.size > 0) item.set('components', components)
@@ -104,8 +104,10 @@ export function collectComponents(tag: NbtCompound): NbtCompound {
   }
 
   const charged = tag.get('Charged')
-  if (charged?.getAsNumber() === 1) {
-    components.set('minecraft:charged_projectiles', new NbtList())
+  if (charged) {
+    if (charged?.getAsNumber() === 1) {
+      components.set('minecraft:charged_projectiles', new NbtList())
+    }
     tag.delete('Charged')
   }
 
