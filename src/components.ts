@@ -1,4 +1,4 @@
-import { NbtByte, NbtCompound, NbtFloat, NbtInt, NbtList, NbtString, NbtTag } from 'deepslate'
+import { NbtByte, NbtCompound, NbtFloat, NbtInt, NbtList, NbtString, NbtTag, NbtType } from 'deepslate'
 
 export function collectComponents(tag: NbtCompound): NbtCompound {
   const components = new NbtCompound()
@@ -426,7 +426,19 @@ export function collectComponents(tag: NbtCompound): NbtCompound {
       const profile = new NbtCompound()
       if (name) profile.set('name', name)
       if (id) profile.set('id', id)
-      if (properties) profile.set('properties', properties)
+      if (properties && properties.isCompound()) {
+        const propertyList = new NbtList<NbtCompound>()
+        properties.getList("textures", NbtType.Compound).forEach(e => {
+          const property = new NbtCompound()
+            .set("name", new NbtString("textures"))
+            .set("value", e.get("Value") ?? new NbtString(""))
+          if (e.has("Signature")) {
+            property.set("signature", e.get("Signature")!)
+          }
+          propertyList.add(property)
+        })
+        profile.set('properties', propertyList)
+      }
       return profile
     }
   })
