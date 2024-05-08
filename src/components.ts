@@ -297,17 +297,17 @@ export function collectComponents(tag: NbtCompound): NbtCompound {
 
   move('Explosion', 'firework_explosion', explosionUpdater)
 
-  const explosions = tag.get('Explosions')
-  const flight = tag.get('Flight')
-  if (explosions || flight) {
+  const fireworksTag = tag.get('Fireworks')
+  if (fireworksTag?.isCompound()) {
+    const explosions = fireworksTag.get('Explosions')
+    const flight = fireworksTag.get('Flight')
     const fireworks = new NbtCompound()
     if (explosions) {
       fireworks.set('explosions', explosions.isList() ? new NbtList(explosions.map(explosionUpdater)) : explosions)
     }
     if (flight) fireworks.set('flight_duration', flight)
     components.set('minecraft:fireworks', fireworks)
-    tag.delete('Explosions')
-    tag.delete('Flight')
+    tag.delete('Fireworks')
   }
 
   function slotUpdater(data: NbtTag) {
