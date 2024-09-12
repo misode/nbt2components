@@ -146,7 +146,7 @@ export function collectComponents(tag: NbtCompound): NbtCompound {
     return map
   })
 
-  move('map', 'map')
+  move('map', 'map_id')
 
   move('CustomModelData', 'custom_model_data')
 
