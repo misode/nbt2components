@@ -95,8 +95,8 @@ function getOutput(input: string) {
   if (mode === 'Command') {
     const pairs: string[] = []
     components.forEach((key, value) => {
-      const stringValue = key === 'minecraft:custom_name' ? `'${value.getAsString()}'`
-        : key === 'minecraft:lore' ? `[${(value as NbtList).map(e => `'${e.getAsString()}'`).join(',')}]`
+      const stringValue = key === 'minecraft:custom_name' ? `'${value.getAsString().replace(/(['\\])/g, "\\$1")}'`
+        : key === 'minecraft:lore' ? `[${(value as NbtList).map(e => `'${e.getAsString().replace(/(['\\])/g, "\\$1")}'`).join(',')}]`
           : value.toString()
       pairs.push(key.replace(/^minecraft:/, '') + '=' + stringValue)
     })
